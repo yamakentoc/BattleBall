@@ -31,7 +31,7 @@ public class PlayerBall : MonoBehaviour {
         if (phase == GodPhase.Moved) {
             nowPos = GodTouch.GetPosition();
             differenceDisVector2 = nowPos - startPos;
-            speed = 30;
+            speed = 20;
             radian = Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
         }
         //離した時
@@ -43,10 +43,18 @@ public class PlayerBall : MonoBehaviour {
     void Move() {
         Debug.Log(rigidbody.velocity.magnitude);
         //rigidbody.velocity = transform.forward * speed;
-
-        //rigidbody.AddForce(transform.forward * speed, ForceMode.Impulse);
-
-        rigidbody.AddForce(2 * (transform.forward * speed - rigidbody.velocity));
+        //rigidbody.AddForce(transform.forward * speed, ForceMode.Force);
+        rigidbody.AddForce(5 * (transform.forward * speed - rigidbody.velocity));
         rigidbody.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, radian, 0), 10);
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag.Equals("NeutralBall")) {
+            transform.localScale = transform.localScale * 1.1f;
+            transform.localPosition = new Vector3(transform.localPosition.x,
+                                              transform.localScale.y / 2,
+                                              transform.localPosition.z);
+            Destroy(other.gameObject);
+        }
     }
 }

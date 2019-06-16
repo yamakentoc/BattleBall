@@ -8,9 +8,12 @@ public class PlayerBall : MonoBehaviour {
     [SerializeField] new Rigidbody rigidbody;
     private float speed, radian, differenceDisFloat;
     private Vector2 startPos, nowPos, differenceDisVector2;
+    private Renderer renderer;
+    private SphereCollider sphereCollider;
 
     void Start() {
-    
+        renderer = GetComponent<Renderer>();
+        sphereCollider = GetComponent<SphereCollider>();
     }
 
     void Update() {
@@ -41,7 +44,6 @@ public class PlayerBall : MonoBehaviour {
     }
 
     void Move() {
-        Debug.Log(rigidbody.velocity.magnitude);
         //rigidbody.velocity = transform.forward * speed;
         //rigidbody.AddForce(transform.forward * speed, ForceMode.Force);
         rigidbody.AddForce(5 * (transform.forward * speed - rigidbody.velocity));
@@ -50,10 +52,13 @@ public class PlayerBall : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag.Equals("NeutralBall")) {
-            transform.localScale = transform.localScale * 1.1f;
+            transform.localScale = new Vector3(transform.localScale.x + 0.05f,
+                                               transform.localScale.y + 0.05f,
+                                               transform.localScale.z + 0.05f);
             transform.localPosition = new Vector3(transform.localPosition.x,
                                               transform.localScale.y / 2,
                                               transform.localPosition.z);
+            
             Destroy(other.gameObject);
         }
     }

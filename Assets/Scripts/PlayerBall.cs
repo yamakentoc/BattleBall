@@ -26,7 +26,7 @@ public class PlayerBall : MonoBehaviour {
         //タッチし始めた時
         if (phase == GodPhase.Began) {
             startPos = GodTouch.GetPosition();
-            //speed = 5;
+            Debug.Log(startPos);
         }
         //スワイプしてる時
         if (phase == GodPhase.Moved) {

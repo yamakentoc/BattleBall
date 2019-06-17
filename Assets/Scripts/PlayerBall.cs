@@ -6,14 +6,13 @@ using GodTouches;
 public class PlayerBall : MonoBehaviour {
 
     [SerializeField] new Rigidbody rigidbody;
+    [SerializeField] CameraController cameraController;
     private float speed, radian, differenceDisFloat;
     private Vector2 startPos, nowPos, differenceDisVector2;
-    private Renderer renderer;
-    private SphereCollider sphereCollider;
+    private Vector3 previousScale;
 
     void Start() {
-        renderer = GetComponent<Renderer>();
-        sphereCollider = GetComponent<SphereCollider>();
+        previousScale = transform.localScale;
     }
 
     void Update() {
@@ -52,14 +51,22 @@ public class PlayerBall : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag.Equals("NeutralBall")) {
-            transform.localScale = new Vector3(transform.localScale.x + 0.05f,
-                                               transform.localScale.y + 0.05f,
-                                               transform.localScale.z + 0.05f);
+            //transform.localScale = new Vector3(transform.localScale.x + 0.05f,
+            //                                   transform.localScale.y + 0.05f,
+            //                                   transform.localScale.z + 0.05f);
+
+            //デバッグ
+            transform.localScale = new Vector3(transform.localScale.x * 1.1f,
+                                               transform.localScale.y * 1.1f,
+                                               transform.localScale.z * 1.1f);
+
             transform.localPosition = new Vector3(transform.localPosition.x,
                                               transform.localScale.y / 2,
                                               transform.localPosition.z);
-            
+
+            cameraController.SetHoge((transform.localScale - previousScale) * 2.0f);
             Destroy(other.gameObject);
+            previousScale = transform.localScale;
         }
     }
 }

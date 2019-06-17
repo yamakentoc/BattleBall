@@ -64,7 +64,7 @@ public class PlayerBall : MonoBehaviour {
                                               transform.localScale.y / 2,
                                               transform.localPosition.z);
 
-            cameraController.SetHoge((transform.localScale - previousScale) * 2.0f);
+            cameraController.SetMovePosition((transform.localScale - previousScale) * 2.0f);
             Destroy(other.gameObject);
             previousScale = transform.localScale;
         }

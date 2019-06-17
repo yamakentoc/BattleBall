@@ -1,25 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class CameraController : MonoBehaviour {
 
-    [SerializeField] Camera camera;
-    [SerializeField] GameObject playerBall;
-    
-    private Vector3 offset, hoge;
+    [SerializeField] GameObject playerBall, cameraManager;
+    private Vector3 offset, movePosition;
 
     void Start() {
         offset = transform.position - playerBall.transform.position;       
     }
 
     void LateUpdate() {
-        transform.localPosition = playerBall.transform.position + offset + hoge;
+        transform.localPosition = playerBall.transform.position + offset;
     }
 
-    public void SetHoge(Vector3 hoge) {
-        this.hoge += new Vector3(0, hoge.y, -hoge.z);
-        Debug.Log("hoge: " + hoge + "this.hoge: " + this.hoge);
+    public void SetMovePosition(Vector3 movePosition) {
+        this.movePosition += new Vector3(0, movePosition.y, -movePosition.z);
+        cameraManager.transform.DOMove(this.movePosition, 0.7f);
     }
 
 }

@@ -5,7 +5,7 @@ using GodTouches;
 
 public class GameManager : MonoBehaviour {
 
-    [SerializeField] GameObject neutralBall;
+    [SerializeField] GameObject neutralBall, neutralBalls;
 
     void Start() {
         int value = 0;
@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
             float randomX = Random.Range(-150f, 150f);
             float randomZ = Random.Range(-150f, 150f);
             Vector3 position = new Vector3(randomX, neutralBall.transform.localScale.y / 2, randomZ);
-            Instantiate(neutralBall, position, Quaternion.identity);
+            Instantiate(neutralBall, position, Quaternion.identity, neutralBalls.transform);
         }
     }
 

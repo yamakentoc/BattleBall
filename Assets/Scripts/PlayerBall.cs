@@ -25,29 +25,34 @@ public class PlayerBall : MonoBehaviour {
 
     void MoveControll() {
         GodPhase phase = GodTouch.GetPhase();
-        //タッチし始めた時
-        if (phase == GodPhase.Began) {
-            startPos = GodTouch.GetPosition();
-        }
-        //スワイプしてる時
-        if (phase == GodPhase.Moved) {
-            nowPos = GodTouch.GetPosition();
-            differenceDisVector2 = nowPos - startPos;
-            speed = 20;
-            radian = Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
-        }
-        //離した時
-        if (phase == GodPhase.Ended) {
-            speed = 0;
+        switch (phase) {
+            case GodPhase.Began:
+                startPos = GodTouch.GetPosition();
+                break;
+            case GodPhase.Moved:
+                nowPos = GodTouch.GetPosition();
+                differenceDisVector2 = nowPos - startPos;
+
+                if (differenceDisVector2 == new Vector2(0, 0)) {
+                    speed = 0;
+                } else {
+                    speed = 20;
+                    radian = Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
+                }
+                break;
+            case GodPhase.Ended:
+                speed = 0;
+                break;
         }
     }
 
     void Move() {
         //rigidbody.velocity = transform.forward * speed;
         //rigidbody.AddForce(transform.forward * speed, ForceMode.Force);
+        
         rigidbody.AddForce(5 * (transform.forward * speed - rigidbody.velocity));
-        rigidbody.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, radian, 0), 10);
-        Debug.Log("velocity.magnitude: " + rigidbody.velocity.magnitude);
+        rigidbody.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, radian, 0), 1);
+       // Debug.Log("velocity.magnitude: " + rigidbody.velocity.magnitude);
     }
 
     private void OnTriggerEnter(Collider other) {

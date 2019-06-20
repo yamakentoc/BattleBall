@@ -7,9 +7,9 @@ public class PlayerBall : MonoBehaviour {
 
     [SerializeField] new Rigidbody rigidbody;
     [SerializeField] CameraController cameraController;
-    private float speed, radian, differenceDisFloat;
-    private Vector2 startPos, nowPos, differenceDisVector2;
     private Vector3 previousScale;
+    private Vector2 startPos, nowPos, differenceDisVector2;
+    private float speed, radian, doubleTapTime;
 
     void Start() {
         previousScale = transform.localScale;
@@ -24,26 +24,31 @@ public class PlayerBall : MonoBehaviour {
     }
 
     void MoveControll() {
+        doubleTapTime += Time.deltaTime;
+        //Debug.Log(doubleTapTime);
         GodPhase phase = GodTouch.GetPhase();
         switch (phase) {
             case GodPhase.Began:
                 startPos = GodTouch.GetPosition();
+                if (doubleTapTime <= 0.2f) {
+                    //ダブルタップしたら何秒かダブルタップできないようにする必要がある
+                    Debug.Log("ダブルタップ！ " + doubleTapTime);
+                }
+                doubleTapTime = 0;
                 break;
             case GodPhase.Moved:
                 nowPos = GodTouch.GetPosition();
                 differenceDisVector2 = nowPos - startPos;
-
-                if (differenceDisVector2 == new Vector2(0, 0)) {
-                    speed = 0;
-                } else {
-                    speed = 20;
-                    radian = Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
-                }
+                //Debug.Log(differenceDisVector2);
+                Debug.Log(GodTouch.GetPosition());
+                speed = differenceDisVector2 == new Vector2(0, 0) ? 0 : 20;
+                radian = differenceDisVector2 == new Vector2(0, 0) ? radian : Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
                 break;
             case GodPhase.Ended:
                 speed = 0;
                 break;
         }
+        //Debug.Log(doubleTapTime);
     }
 
     void Move() {

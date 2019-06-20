@@ -5,22 +5,30 @@ using UnityEngine;
 public class TouchManager : MonoBehaviour {
     private static Vector3 TouchPosition = Vector3.zero;
 
-    public static TouchType GetTouchType() {
-        if (Application.isEditor) {
-            if (Input.GetMouseButtonDown(0)) { return TouchType.Began; }
-            if (Input.GetMouseButton(0)) { return TouchType.Moved; }
-            if (Input.GetMouseButtonUp(0)) { return TouchType.Ended; }
+    public static List<(TouchType touchType, int id)> GetTouchInfo() {
+        List<(TouchType touchType, int id)> touchInfos = new List<(TouchType, int)>();
+    if (Application.isEditor) {
+            if (Input.GetMouseButtonDown(0)) { touchInfos.Add((TouchType.Began, 0)); }
+            if (Input.GetMouseButton(0)) { touchInfos.Add((TouchType.Moved, 0)); }
+            if (Input.GetMouseButtonUp(0)) { touchInfos.Add((TouchType.Ended, 0)); }
+            if (touchInfos.Count == 0) { touchInfos.Add((TouchType.None, 0)); }
+            return touchInfos;
         } else {
             if (Input.touchCount > 0) {
-                return (TouchType)((int)Input.GetTouch(0).phase);
+                foreach(Touch touch in Input.touches) {
+                    touchInfos.Add(((TouchType)((int)touch.phase), touch.fingerId));
+                    //Debug.Log("指のID: " + touch.fingerId);
+                }
+                return touchInfos;
             }
         }
-        return TouchType.None;
+        return new List<(TouchType touchType, int id)> { (TouchType.None, 0) };
+        
     }
 
     public static Vector3 GetTouchPosition() {
         if (Application.isEditor) {
-            TouchType touch = GetTouchType();
+            TouchType touch = GetTouchInfo()[0].touchType;
             if (touch != TouchType.None) { return Input.mousePosition; }
         } else {
             if (Input.touchCount > 0) {

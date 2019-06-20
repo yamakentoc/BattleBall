@@ -24,49 +24,48 @@ public class PlayerBall : MonoBehaviour {
     }
 
     void MoveControll() {
-        //doubleTapTime += Time.deltaTime;
+        doubleTapTime += Time.deltaTime;
         //Debug.Log(doubleTapTime);
-        TouchType touchType = TouchManager.GetTouchType();
-        switch (touchType) {
-            case TouchType.Began:
-                startPos = TouchManager.GetTouchPosition();
-                //if (doubleTapTime <= 0.2f && !isSpeedUp) {
-                //    //ダブルタップしたら何秒かダブルタップできないようにする必要がある
-                //    Debug.Log("ダブルタップ！ " + doubleTapTime);
-                //    isSpeedUp = true;
-                //}
-                //doubleTapTime = 0;
-                break;
-            case TouchType.Moved:
-                nowPos = TouchManager.GetTouchPosition();
-                differenceDisVector2 = nowPos - startPos;
-                speed = differenceDisVector2 == new Vector2(0, 0) ? 0 : 20;
-                radian = differenceDisVector2 == new Vector2(0, 0) ? radian : Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
-                break;
-            case TouchType.Ended:
-                speed = 0;
-                break;
+       List< (TouchType touchType, int id)> touchInfos = TouchManager.GetTouchInfo();
+        foreach ((TouchType touchType, int id) in touchInfos) {
+            switch (touchType) {
+                case TouchType.Began:
+                    if (id == 0) { startPos = TouchManager.GetTouchPosition(); }
+                    if (doubleTapTime <= 0.2f && !isSpeedUp) {
+                        Debug.Log("ダブルタップ！ " + doubleTapTime);
+                        isSpeedUp = true;
+                    }
+                    doubleTapTime = 0;
+                    break;
+                case TouchType.Moved:
+                    if (id == 0) {
+                        nowPos = TouchManager.GetTouchPosition();
+                        differenceDisVector2 = nowPos - startPos;
+                        speed = differenceDisVector2 == new Vector2(0, 0) ? 0 : 20;
+                        radian = differenceDisVector2 == new Vector2(0, 0) ? radian : Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
+                    }
+                    break;
+                case TouchType.Ended:
+                    if (id == 0) { speed = 0; }
+                    break;
+            }
+            SpeedUp(touchType, id);
         }
-        //SpeedUp(phase);
-        judgeDoubleTap(touchType);
     }
 
-    void judgeDoubleTap(TouchType touchType) {
-        if (isDoubleTapStart) {
-            doubleTapTime += Time.deltaTime;
-            if (doubleTapTime < 0.2f) {
-                if (touchType == TouchType.Began) {//ダブルタップ
-                    isDoubleTapStart = false;
-                    doubleTapTime = 0;
-                    Debug.Log("ダブルタップ!");
-                }
+
+    void SpeedUp(TouchType phase, int id) {
+        if (isSpeedUp) {
+            speedUpTime += Time.deltaTime;
+            if (speedUpTime <= 2.0f) {
+                speed = 40;
             } else {
-                isDoubleTapStart = false;
-                doubleTapTime = 0;
-            }
-        } else {
-            if (touchType == TouchType.Began) {
-                isDoubleTapStart = true;
+                speedUpTime = 0;
+                isSpeedUp = false;
+                speed *= 0.5f;
+                if (id == 0 && phase == TouchType.None) {
+                    speed = 0;
+                }
             }
         }
     }
@@ -98,23 +97,4 @@ public class PlayerBall : MonoBehaviour {
             previousScale = transform.localScale;
         }
     }
-
-    //void SpeedUp(GodPhase phase) {
-    //    if (isSpeedUp) {
-    //        speedUpTime += Time.deltaTime;
-    //        if (speedUpTime <= 2.0f) {
-    //            if (phase == GodPhase.None) {
-    //                speed = 20;
-    //            }
-    //            speed *= 2;
-    //        } else {
-    //            speedUpTime = 0;
-    //            isSpeedUp = false;
-    //            speed *= 0.5f;
-    //            if (phase == GodPhase.None) {
-    //                speed = 0;
-    //            }
-    //        }
-    //    }
-    //}
 }

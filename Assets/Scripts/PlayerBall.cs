@@ -9,7 +9,8 @@ public class PlayerBall : MonoBehaviour {
     [SerializeField] CameraController cameraController;
     private Vector3 previousScale;
     private Vector2 startPos, nowPos, differenceDisVector2;
-    private float speed, radian, doubleTapTime;
+    private float speed, radian, doubleTapTime, speedUpTime;
+    private bool isSpeedUp;
 
     void Start() {
         previousScale = transform.localScale;
@@ -30,17 +31,16 @@ public class PlayerBall : MonoBehaviour {
         switch (phase) {
             case GodPhase.Began:
                 startPos = GodTouch.GetPosition();
-                if (doubleTapTime <= 0.2f) {
+                if (doubleTapTime <= 0.2f && !isSpeedUp) {
                     //ダブルタップしたら何秒かダブルタップできないようにする必要がある
                     Debug.Log("ダブルタップ！ " + doubleTapTime);
+                    isSpeedUp = true;
                 }
                 doubleTapTime = 0;
                 break;
             case GodPhase.Moved:
                 nowPos = GodTouch.GetPosition();
                 differenceDisVector2 = nowPos - startPos;
-                //Debug.Log(differenceDisVector2);
-                Debug.Log(GodTouch.GetPosition());
                 speed = differenceDisVector2 == new Vector2(0, 0) ? 0 : 20;
                 radian = differenceDisVector2 == new Vector2(0, 0) ? radian : Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
                 break;
@@ -48,13 +48,11 @@ public class PlayerBall : MonoBehaviour {
                 speed = 0;
                 break;
         }
-        //Debug.Log(doubleTapTime);
+        SpeedUp(phase);
+        Debug.Log(rigidbody.velocity.magnitude);
     }
 
     void Move() {
-        //rigidbody.velocity = transform.forward * speed;
-        //rigidbody.AddForce(transform.forward * speed, ForceMode.Force);
-        
         rigidbody.AddForce(5 * (transform.forward * speed - rigidbody.velocity));
         rigidbody.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, radian, 0), 1);
        // Debug.Log("velocity.magnitude: " + rigidbody.velocity.magnitude);
@@ -79,6 +77,25 @@ public class PlayerBall : MonoBehaviour {
             cameraController.SetMovePosition((transform.localScale - previousScale) * 2.0f);
             Destroy(other.gameObject);
             previousScale = transform.localScale;
+        }
+    }
+
+    void SpeedUp(GodPhase phase) {
+        if (isSpeedUp) {
+            speedUpTime += Time.deltaTime;
+            if (speedUpTime <= 2.0f) {
+                if (phase == GodPhase.None) {
+                    speed = 20;
+                }
+                speed *= 2;
+            } else {
+                speedUpTime = 0;
+                isSpeedUp = false;
+                speed *= 0.5f;
+                if (phase == GodPhase.None) {
+                    speed = 0;
+                }
+            }
         }
     }
 }

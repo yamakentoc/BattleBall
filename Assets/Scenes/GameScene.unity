@@ -450,9 +450,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41b8b9780c5164c86b906564b948220d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rectTransform: {fileID: 0}
-  target: {fileID: 1240385834}
-  canvas: {fileID: 455691377}
 --- !u!1 &1075730155
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +766,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5fd3da07078e6674e993ecdace763739, type: 2}
+  - {fileID: 2100000, guid: 0fd259f1e6fb443b485101757351e48a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

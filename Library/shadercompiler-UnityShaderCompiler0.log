@@ -1,2 +1,72 @@
 Base path: /Applications/Unity/Hub/Editor/2019.1.6f1/Unity.app/Contents
 Cmd: initializeCompiler
+Cmd: preprocess
+  insize=1399 outsize=441 ok=1
+Cmd: preprocess
+  insize=435 outsize=435 ok=1
+Cmd: preprocess
+  insize=7913 outsize=553 ok=1
+Cmd: preprocess
+  insize=1615 outsize=1853 ok=1
+Cmd: preprocess
+  insize=3647 outsize=1262 ok=1
+Cmd: preprocess
+  insize=4405 outsize=1085 ok=1
+Cmd: preprocess
+  insize=3610 outsize=1675 ok=1
+Cmd: preprocess
+  insize=1099 outsize=1288 ok=1
+Cmd: preprocess
+  insize=1454 outsize=1800 ok=1
+Cmd: preprocess
+  insize=1013 outsize=1373 ok=1
+Cmd: preprocess
+  insize=12931 outsize=2549 ok=1
+Cmd: preprocess
+  insize=1044 outsize=940 ok=1
+Cmd: preprocess
+  insize=2378 outsize=1060 ok=1
+Cmd: preprocess
+  insize=10388 outsize=3956 ok=1
+Cmd: preprocess
+  insize=2236 outsize=943 ok=1
+Cmd: preprocess
+  insize=3899 outsize=2117 ok=1
+Cmd: preprocess
+  insize=3569 outsize=2622 ok=1
+Cmd: preprocess
+  insize=12069 outsize=2430 ok=1
+Cmd: preprocess
+  insize=3893 outsize=2120 ok=1
+Cmd: preprocess
+  insize=2667 outsize=1124 ok=1
+Cmd: preprocess
+  insize=1567 outsize=610 ok=1
+Cmd: preprocess
+  insize=1876 outsize=565 ok=1
+Cmd: preprocess
+  insize=7317 outsize=2448 ok=1
+Cmd: preprocess
+  insize=7975 outsize=2720 ok=1
+Cmd: preprocess
+  insize=1013 outsize=1615 ok=1
+Cmd: preprocess
+  insize=1457 outsize=474 ok=1
+Cmd: preprocess
+  insize=2273 outsize=1004 ok=1
+Cmd: preprocess
+  insize=2420 outsize=1129 ok=1
+Cmd: preprocess
+  insize=1308 outsize=352 ok=1
+Cmd: preprocess
+  insize=2088 outsize=500 ok=1
+Cmd: preprocess
+  insize=10381 outsize=3946 ok=1
+Cmd: preprocess
+  insize=880 outsize=1145 ok=1
+Cmd: preprocess
+  insize=6283 outsize=1632 ok=1
+Cmd: preprocess
+  insize=4407 outsize=3641 ok=1
+Cmd: preprocess
+  insize=7327 outsize=2458 ok=1

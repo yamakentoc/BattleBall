@@ -43,11 +43,11 @@ public class PlayerBall : MonoBehaviour {
                     if (id == 0) {
                         nowPos = TouchManager.GetTouchPosition();
                         differenceDisVector2 = nowPos - startPos;
-                        speed = differenceDisVector2 == new Vector2(0, 0) ? 0 : 20;
-                        if (isContinueMovefromDoblueTap) {
-                            speed = 20;
+                        if (!(differenceDisVector2.x < 10 && differenceDisVector2.x > -10 && differenceDisVector2.y < 10 && differenceDisVector2.y > -10)) {
+                            speed = differenceDisVector2 == new Vector2(0, 0) ? 0 : 20;
+                            if (isContinueMovefromDoblueTap) { speed = 20; }
+                            radian = differenceDisVector2 == new Vector2(0, 0) ? radian : Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
                         }
-                        radian = differenceDisVector2 == new Vector2(0, 0) ? radian : Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
                     }
                     break;
                 case TouchType.Ended:

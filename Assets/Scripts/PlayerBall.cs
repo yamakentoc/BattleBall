@@ -11,7 +11,7 @@ public class PlayerBall : MonoBehaviour {
     private Vector3 previousScale;
     private Vector2 startPos, nowPos, differenceDisVector2;
     private float speed, radian, doubleTapTime, speedUpTime;
-    private bool isSpeedUp, isDoubleTapStart;
+    private bool isSpeedUp, isDoubleTapStart, isContinueMovefromDoblueTap;
 
     void Start() {
         previousScale = transform.localScale;
@@ -44,11 +44,15 @@ public class PlayerBall : MonoBehaviour {
                         nowPos = TouchManager.GetTouchPosition();
                         differenceDisVector2 = nowPos - startPos;
                         speed = differenceDisVector2 == new Vector2(0, 0) ? 0 : 20;
+                        if (isContinueMovefromDoblueTap) {
+                            speed = 20;
+                        }
                         radian = differenceDisVector2 == new Vector2(0, 0) ? radian : Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
                     }
                     break;
                 case TouchType.Ended:
                     if (id == 0) { speed = 0; }
+                    isContinueMovefromDoblueTap = false;
                     break;
             }
             SpeedUp(touchType, id);
@@ -64,9 +68,10 @@ public class PlayerBall : MonoBehaviour {
             } else {
                 speedUpTime = 0;
                 isSpeedUp = false;
-                speed *= 0.5f;
-                if (id == 0 && phase == TouchType.None) {
-                    speed = 0;
+                speed = 20;
+                if (id == 0 && phase == TouchType.None) { speed = 0; }
+                if (phase == TouchType.Stationary) {
+                    isContinueMovefromDoblueTap = true;
                 }
             }
         }

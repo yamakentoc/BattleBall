@@ -6,6 +6,8 @@ public class PlayerBall : MonoBehaviour {
 
     [SerializeField] new Rigidbody rigidbody;
     [SerializeField] CameraController cameraController;
+    [SerializeField] ParticleSystem particle;
+    [SerializeField] PlayerName playerName;
     private Vector3 previousScale;
     private Vector2 startPos, nowPos, differenceDisVector2;
     private float speed, radian, doubleTapTime, speedUpTime;
@@ -26,7 +28,7 @@ public class PlayerBall : MonoBehaviour {
     void MoveControll() {
         doubleTapTime += Time.deltaTime;
         //Debug.Log(doubleTapTime);
-       List< (TouchType touchType, int id)> touchInfos = TouchManager.GetTouchInfo();
+        List< (TouchType touchType, int id)> touchInfos = TouchManager.GetTouchInfo();
         foreach ((TouchType touchType, int id) in touchInfos) {
             switch (touchType) {
                 case TouchType.Began:
@@ -91,8 +93,12 @@ public class PlayerBall : MonoBehaviour {
                                               transform.localScale.y / 2,
                                               transform.localPosition.z);
 
-            rigidbody.mass = transform.localScale.x;
-            cameraController.SetMovePosition((transform.localScale - previousScale) * 2.0f);
+            rigidbody.mass = transform.localScale.x / 3.0f;
+            Vector3 diffScale = transform.localScale - previousScale;
+            playerName.ChangePosition(diffScale);
+            particle.transform.localScale += diffScale / 3.0f;
+            particle.startLifetime += diffScale.x / 4.0f;
+            cameraController.SetMovePosition(diffScale * 2.0f);
             Destroy(other.gameObject);
             previousScale = transform.localScale;
         }

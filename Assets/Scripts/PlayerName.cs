@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerName : MonoBehaviour {
     [SerializeField] GameObject playerBall;
@@ -20,7 +21,8 @@ public class PlayerName : MonoBehaviour {
         transform.localPosition = playerBallPos + offset + playerBallDiffScale;
     }
 
-    public void ChangePosition(Vector3 diff) {
+    public void ChangePosition(Vector3 diff) { 
         playerBallDiffScale += new Vector3(0, diff.y / 2.0f, 0);
+        GetComponent<TextMeshPro>().fontSize += diff.x * 2;
     }
 }

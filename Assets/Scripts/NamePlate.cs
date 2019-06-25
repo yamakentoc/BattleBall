@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class PlayerName : MonoBehaviour {
-    [SerializeField] GameObject playerBall;
-    private Vector3 offset, playerBallDiffScale;
+public class NamePlate : MonoBehaviour {
+    [SerializeField] GameObject ball;
+    private Vector3 offset, ballDiffScale;
     private TextMeshPro textMeshPro;
     private int ballValue;
 
     void Start() {
-        offset = transform.position - playerBall.transform.position;
+        offset = transform.position - ball.transform.position;
         textMeshPro = GetComponent<TextMeshPro>();
         UpdatePosition();
     }
@@ -20,14 +20,15 @@ public class PlayerName : MonoBehaviour {
     }
 
     void UpdatePosition() {
-        Vector3 playerBallPos = playerBall.transform.localPosition;
-        transform.localPosition = playerBallPos + offset + playerBallDiffScale;
+        Vector3 playerBallPos = ball.transform.localPosition;
+        transform.localPosition = playerBallPos + offset + ballDiffScale;
     }
 
-    public void ChangePosition(Vector3 diff) { 
-        playerBallDiffScale += new Vector3(0, diff.y / 2.0f, 0);
+    public void ChangePosition(Vector3 diff) {
+        ballDiffScale += new Vector3(0, diff.y / 2.0f, 0);
         textMeshPro.fontSize += diff.x * 2;
         ballValue += 1;
         textMeshPro.text = "Player\n" + ballValue;
     }
+
 }

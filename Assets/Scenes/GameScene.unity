@@ -366,10 +366,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 292794272}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c420532eff1840e69232b020b86acda, type: 3}
+  m_Script: {fileID: 11500000, guid: 451ba75254de1438f966d277f72ccadb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBall: {fileID: 1240385830}
+  ball: {fileID: 1240385830}
 --- !u!1 &455691374
 GameObject:
   m_ObjectHideFlags: 0
@@ -5578,7 +5578,7 @@ MonoBehaviour:
   rigidbody: {fileID: 1240385835}
   cameraController: {fileID: 963194229}
   particle: {fileID: 1218745028}
-  playerName: {fileID: 292794278}
+  namePlate: {fileID: 292794278}
 --- !u!1 &1295503968
 GameObject:
   m_ObjectHideFlags: 0

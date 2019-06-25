@@ -7,7 +7,7 @@ public class PlayerBall : MonoBehaviour {
     [SerializeField] new Rigidbody rigidbody;
     [SerializeField] CameraController cameraController;
     [SerializeField] ParticleSystem particle;
-    [SerializeField] PlayerName playerName;
+    [SerializeField] NamePlate namePlate;
     private Vector3 previousScale;
     private Vector2 startPos, nowPos, differenceDisVector2;
     private float speed, radian, doubleTapTime, speedUpTime;
@@ -100,7 +100,7 @@ public class PlayerBall : MonoBehaviour {
 
             rigidbody.mass = transform.localScale.x / 3.0f;
             Vector3 diffScale = transform.localScale - previousScale;
-            playerName.ChangePosition(diffScale);
+            namePlate.ChangePosition(diffScale);
             particle.transform.localScale += diffScale / 3.0f;
             particle.startLifetime += diffScale.x / 4.0f;
             cameraController.SetMovePosition(diffScale * 2.0f);

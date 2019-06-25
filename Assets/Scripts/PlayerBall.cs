@@ -6,10 +6,12 @@ public class PlayerBall : MonoBehaviour {
 
     [SerializeField] new Rigidbody rigidbody;
     [SerializeField] CameraController cameraController;
+    [SerializeField] ParticleSystem particle;
+    [SerializeField] PlayerName playerName;
     private Vector3 previousScale;
     private Vector2 startPos, nowPos, differenceDisVector2;
     private float speed, radian, doubleTapTime, speedUpTime;
-    private bool isSpeedUp, isDoubleTapStart;
+    private bool isSpeedUp, isDoubleTapStart, isContinueMovefromDoblueTap;
 
     void Start() {
         previousScale = transform.localScale;
@@ -26,7 +28,7 @@ public class PlayerBall : MonoBehaviour {
     void MoveControll() {
         doubleTapTime += Time.deltaTime;
         //Debug.Log(doubleTapTime);
-       List< (TouchType touchType, int id)> touchInfos = TouchManager.GetTouchInfo();
+        List< (TouchType touchType, int id)> touchInfos = TouchManager.GetTouchInfo();
         foreach ((TouchType touchType, int id) in touchInfos) {
             switch (touchType) {
                 case TouchType.Began:
@@ -41,12 +43,16 @@ public class PlayerBall : MonoBehaviour {
                     if (id == 0) {
                         nowPos = TouchManager.GetTouchPosition();
                         differenceDisVector2 = nowPos - startPos;
-                        speed = differenceDisVector2 == new Vector2(0, 0) ? 0 : 20;
-                        radian = differenceDisVector2 == new Vector2(0, 0) ? radian : Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
+                        if (!(differenceDisVector2.x < 10 && differenceDisVector2.x > -10 && differenceDisVector2.y < 10 && differenceDisVector2.y > -10)) {
+                            speed = differenceDisVector2 == new Vector2(0, 0) ? 0 : 20;
+                            if (isContinueMovefromDoblueTap) { speed = 20; }
+                            radian = differenceDisVector2 == new Vector2(0, 0) ? radian : Mathf.Atan2(differenceDisVector2.x, differenceDisVector2.y) * Mathf.Rad2Deg;
+                        }
                     }
                     break;
                 case TouchType.Ended:
                     if (id == 0) { speed = 0; }
+                    isContinueMovefromDoblueTap = false;
                     break;
             }
             SpeedUp(touchType, id);
@@ -62,9 +68,10 @@ public class PlayerBall : MonoBehaviour {
             } else {
                 speedUpTime = 0;
                 isSpeedUp = false;
-                speed *= 0.5f;
-                if (id == 0 && phase == TouchType.None) {
-                    speed = 0;
+                speed = 20;
+                if (id == 0 && phase == TouchType.None) { speed = 0; }
+                if (phase == TouchType.Stationary) {
+                    isContinueMovefromDoblueTap = true;
                 }
             }
         }
@@ -91,8 +98,12 @@ public class PlayerBall : MonoBehaviour {
                                               transform.localScale.y / 2,
                                               transform.localPosition.z);
 
-            rigidbody.mass = transform.localScale.x;
-            cameraController.SetMovePosition((transform.localScale - previousScale) * 2.0f);
+            rigidbody.mass = transform.localScale.x / 3.0f;
+            Vector3 diffScale = transform.localScale - previousScale;
+            playerName.ChangePosition(diffScale);
+            particle.transform.localScale += diffScale / 3.0f;
+            particle.startLifetime += diffScale.x / 4.0f;
+            cameraController.SetMovePosition(diffScale * 2.0f);
             Destroy(other.gameObject);
             previousScale = transform.localScale;
         }

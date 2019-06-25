@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
     void Start() {
         int value = 0;
-        while (value < 1000) {
+        while (value < 3000) {
             value++;
             float randomX = Random.Range(-150f, 150f);
             float randomZ = Random.Range(-150f, 150f);

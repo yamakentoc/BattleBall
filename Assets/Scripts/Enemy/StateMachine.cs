@@ -30,4 +30,10 @@ public class StateMachine<T> {
             currentState.Execute();
         }
     }
+
+    public void FixedUpdate() {
+        if (currentState != null) {
+            currentState.FixedExecute();
+        }
+    }
 }

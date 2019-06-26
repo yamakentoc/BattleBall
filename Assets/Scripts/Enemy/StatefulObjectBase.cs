@@ -28,6 +28,7 @@ public class StatefulObjectBase<T, TEnum> : MonoBehaviour where T : class where 
     protected virtual void Update() {
         if (stateMachine != null) {
             stateMachine.Update();
+            stateMachine.FixedUpdate();
         }
     }
 }

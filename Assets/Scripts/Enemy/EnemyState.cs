@@ -10,6 +10,5 @@ public enum EnemyState {
     BallCollect,
     Tracking,
     Attack,
-    Escape,
-    Disapperar
+    Escape
 }

@@ -80,7 +80,7 @@ public class PlayerBall : MonoBehaviour {
 
     void Move() {
         rigidbody.AddForce(5 * (transform.forward * speed - rigidbody.velocity));
-        Debug.Log(radian);
+        //Debug.Log(radian);
         rigidbody.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, radian, 0), 1);
     }
 

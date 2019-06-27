@@ -31,19 +31,14 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
         if (other.gameObject.tag.Equals("NeutralBall")) {
             Debug.Log("ボールゲット");
             //if (other.gameObject == targetBall) {
-                //Debug.Log("今です！！");
-                foundBall = false;
+            //Debug.Log("今です！！");
+            Destroy(other.gameObject);
+            foundBall = false;
+            targetBall = null;
+            
             //}
         }
     }
-
-    //public void RelayOnTriggerEnter(GameObject ball) {
-    //    if (!foundBall) {
-    //        Debug.Log("ボールを検出");
-    //        foundBall = true;
-    //        targetBall = ball;
-    //    }
-    //}
 
     #region StateBallCollect
     /// <summary>
@@ -51,39 +46,43 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
     /// </summary>
     private class StateBallCollect : State<Enemy> {
         public StateBallCollect(Enemy owner) : base(owner) { }
-
-        public override void Enter() {
-
-        }
+        List<Collider> colliders = new List<Collider>();
+        private float randomTime;
+       
+        public override void Enter() { }
 
         public override void Execute() {
             if (!owner.foundBall) {
-                Collider[] colliders = Physics.OverlapSphere(owner.transform.position, 3);
-                List<Collider> colliderList = new List<Collider>(colliders);
-                colliderList = colliderList.Where(collider => collider.gameObject.tag.Equals("NeutralBall")).ToList();
-
-                if (colliders.Length == 0) {
-                    //ランダムに移動する処理
-                    owner.radian = Random.Range(-180f, 180f);
-                    Debug.Log("ランダム値: " + owner.radian);
-                } else {  
-                    float maxDistance = 0.0f;
+                SearchAroundBall();
+                if (colliders.Count == 0) {
+                    randomTime -= Time.deltaTime;
+                    if (randomTime <= 0.0f) {
+                        randomTime = 2.5f;
+                        owner.radian = Random.Range(-179f, 180f);
+                        Debug.Log("ランダム");
+                    }
+                } else {
+                    Debug.Log("ボール発見");
+                    float minDistance = Vector3.Distance(owner.transform.position, colliders[0].gameObject.transform.position);
                     foreach (Collider collider in colliders) {
-                        if (!collider.gameObject.tag.Equals("NeutralBall")) { return; }
-                            float distance = Vector3.Distance(owner.transform.position, collider.gameObject.transform.position);
-                        if (distance > maxDistance) {
-                            maxDistance = distance;
+                        float distance = Vector3.Distance(owner.transform.position, collider.gameObject.transform.position);
+                        if (distance <= minDistance) {
+                            minDistance = distance;
                             owner.targetBall = collider.gameObject;
                             owner.foundBall = true;
                         }
                     }
                 }
             }
+            if (owner.targetBall != null) {
+                owner.differenceDisVector2 = new Vector2(owner.transform.position.x - owner.targetBall.transform.position.x, owner.transform.position.z - owner.targetBall.transform.position.z);
+                owner.radian = Mathf.Atan2(owner.differenceDisVector2.x, owner.differenceDisVector2.y) * Mathf.Rad2Deg;
+            }
 
-            owner.differenceDisVector2 = new Vector2(-owner.targetBall.transform.position.x, -owner.targetBall.transform.position.z);
-            owner.radian = Mathf.Atan2(owner.differenceDisVector2.x, owner.differenceDisVector2.y) * Mathf.Rad2Deg;
-            Debug.Log("radian: " + owner.radian);
-            
+            if (owner.transform.position.x > 150f || owner.transform.position.x < -150f || owner.transform.position.z > 150f || owner.transform.position.z < -150f) {
+                owner.rigidbody.transform.rotation = Quaternion.AngleAxis(180f, Vector3.up);
+                Debug.Log("ステージ外にでようとした");
+            }
         }
 
         public override void FixedExecute() {
@@ -93,6 +92,11 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
 
         public override void Exit() {
 
+        }
+
+        private void SearchAroundBall() {
+            colliders = Physics.OverlapSphere(owner.transform.position, 3).ToList();
+            colliders = colliders.Where(collider => collider.gameObject.tag.Equals("NeutralBall")).ToList();
         }
 
     }

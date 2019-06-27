@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerBall : MonoBehaviour {
 
-    [SerializeField] new Rigidbody rigidbody;
+    private Rigidbody rigidbody;
     [SerializeField] CameraController cameraController;
     [SerializeField] ParticleSystem particle;
     [SerializeField] NamePlate namePlate;
@@ -15,6 +15,7 @@ public class PlayerBall : MonoBehaviour {
 
     void Start() {
         previousScale = transform.localScale;
+        rigidbody = GetComponent<Rigidbody>();
     }
 
     void Update() {
@@ -79,8 +80,8 @@ public class PlayerBall : MonoBehaviour {
 
     void Move() {
         rigidbody.AddForce(5 * (transform.forward * speed - rigidbody.velocity));
+        Debug.Log(radian);
         rigidbody.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, radian, 0), 1);
-       // Debug.Log("velocity.magnitude: " + rigidbody.velocity.magnitude);
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -88,12 +89,6 @@ public class PlayerBall : MonoBehaviour {
             transform.localScale = new Vector3(transform.localScale.x + 0.05f,
                                                transform.localScale.y + 0.05f,
                                                transform.localScale.z + 0.05f);
-
-            //デバッグ
-            //transform.localScale = new Vector3(transform.localScale.x * 1.1f,
-            //                                   transform.localScale.y * 1.1f,
-            //                                   transform.localScale.z * 1.1f);
-
             transform.localPosition = new Vector3(transform.localPosition.x,
                                               transform.localScale.y / 2,
                                               transform.localPosition.z);

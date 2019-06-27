@@ -10547,7 +10547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0253bf6565e304cb09b2152d18dc90c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 1240385835}
   cameraController: {fileID: 963194229}
   particle: {fileID: 1218745028}
   namePlate: {fileID: 292794278}

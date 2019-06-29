@@ -34,10 +34,6 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
             foundBall = false;
             targetBall = null;
         }
-        //if (other.gameObject.tag.Equals("SafeArea")) {
-        //    Debug.Log("戻ってきた");
-        //    outSideSafeArea = false;
-        //}
     }
 
     public void OnTriggerExit(Collider other) {
@@ -46,7 +42,8 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
             outSideSafeArea = true;
             foundBall = false;
             targetBall = null;
-            radian = radian >= 0 ? -180 + radian : 180 + radian;
+            //radian = radian >= 0 ? -180 + radian : 180 + radian;
+            radian = Mathf.Atan2(-transform.position.x, -transform.position.z) * Mathf.Rad2Deg;
         }
     }
 

@@ -10,9 +10,8 @@ public class GameManager : MonoBehaviour {
         int value = 0;
         while (value < 1000) {
             value++;
-            float randomX = Random.Range(-150f, 150f);
-            float randomZ = Random.Range(-150f, 150f);
-            Vector3 position = new Vector3(randomX, neutralBall.transform.localScale.y / 2, randomZ);
+            Vector2 randomCirclePosition = Random.insideUnitCircle * 150f;
+            Vector3 position = new Vector3(randomCirclePosition.x, neutralBall.transform.localScale.y / 2, randomCirclePosition.y);
             Instantiate(neutralBall, position, Quaternion.identity, neutralBalls.transform);
         }
     }

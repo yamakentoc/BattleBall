@@ -10,8 +10,8 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
     [SerializeField] NamePlate namePlate;
     private Vector3 previousScale;
     private Vector2 startPos, nowPos, differenceDisVector2;
-    private float speed = 20, radian, speedUpTime;
-    private bool foundBall;
+    private float speed = 20, radian, speedUpTime, outSideTime;
+    private bool foundBall, outSideSafeArea;
     private GameObject targetBall;
 
     void Start() {
@@ -30,13 +30,23 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
     public void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag.Equals("NeutralBall")) {
             Debug.Log("ボールゲット");
-            //if (other.gameObject == targetBall) {
-            //Debug.Log("今です！！");
             Destroy(other.gameObject);
             foundBall = false;
             targetBall = null;
-            
-            //}
+        }
+        //if (other.gameObject.tag.Equals("SafeArea")) {
+        //    Debug.Log("戻ってきた");
+        //    outSideSafeArea = false;
+        //}
+    }
+
+    public void OnTriggerExit(Collider other) {
+        if (other.gameObject.tag.Equals("SafeArea")) {
+            Debug.Log("外に出た!");
+            outSideSafeArea = true;
+            foundBall = false;
+            targetBall = null;
+            radian = radian >= 0 ? -180 + radian : 180 + radian;
         }
     }
 
@@ -47,17 +57,23 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
     private class StateBallCollect : State<Enemy> {
         public StateBallCollect(Enemy owner) : base(owner) { }
         List<Collider> colliders = new List<Collider>();
-        private float randomTime;
+        private float randomTime, outSideSafeArea;
        
         public override void Enter() { }
 
         public override void Execute() {
+            if (owner.outSideSafeArea && outSideSafeArea < 2.0f) {
+                outSideSafeArea += Time.deltaTime;
+                return;
+            }
+            owner.outSideSafeArea = false;
+            outSideSafeArea = 0f;
             if (!owner.foundBall) {
                 SearchAroundBall();
                 if (colliders.Count == 0) {
                     randomTime -= Time.deltaTime;
                     if (randomTime <= 0.0f) {
-                        randomTime = 2.5f;
+                        randomTime = 2f;
                         owner.radian = Random.Range(-179f, 180f);
                         Debug.Log("ランダム");
                     }
@@ -69,19 +85,15 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
                         if (distance <= minDistance) {
                             minDistance = distance;
                             owner.targetBall = collider.gameObject;
+                            owner.targetBall.GetComponent<Renderer>().material.color = Color.red;
                             owner.foundBall = true;
                         }
                     }
                 }
             }
             if (owner.targetBall != null) {
-                owner.differenceDisVector2 = new Vector2(owner.transform.position.x - owner.targetBall.transform.position.x, owner.transform.position.z - owner.targetBall.transform.position.z);
+                owner.differenceDisVector2 = new Vector2(owner.targetBall.transform.position.x - owner.transform.position.x, owner.targetBall.transform.position.z - owner.transform.position.z);
                 owner.radian = Mathf.Atan2(owner.differenceDisVector2.x, owner.differenceDisVector2.y) * Mathf.Rad2Deg;
-            }
-
-            if (owner.transform.position.x > 150f || owner.transform.position.x < -150f || owner.transform.position.z > 150f || owner.transform.position.z < -150f) {
-                owner.rigidbody.transform.rotation = Quaternion.AngleAxis(180f, Vector3.up);
-                Debug.Log("ステージ外にでようとした");
             }
         }
 

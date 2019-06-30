@@ -10,12 +10,27 @@ public class GameManager : MonoBehaviour {
     [SerializeField] List<Material> ballMaterials;
     private GameObject playerBall; 
     private const int SUM_PLAYER = 8;
+    private GradientColorKey[] colorKey = new GradientColorKey[2];
+    private GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
+    private Gradient gradient = new Gradient();
 
     void Start() {
         playerBall = player.transform.GetChild(0).gameObject;
-        
+        SetGradientKey();
         DeployPlayerBall();
         DeployNeutralBall();
+    }
+
+    private void SetGradientKey() {
+        colorKey[0].time = 0.35f;
+        colorKey[1].color = Color.white;
+        colorKey[1].time = 1.0f;
+        alphaKey[0].alpha = 0.0f;
+        alphaKey[0].time = 0.0f;
+        alphaKey[1].alpha = 0.15f;
+        alphaKey[1].time = 0.338f;
+        alphaKey[2].alpha = 0.0f;
+        alphaKey[2].time = 1.0f;
     }
 
     private void DeployNeutralBall() {
@@ -36,13 +51,22 @@ public class GameManager : MonoBehaviour {
             if (i == playerPosition) {
                 player.transform.position = position;
                 playerBall.GetComponent<Renderer>().material.color = ballMaterials[i].color;
+                SetGradient(playerBall, ballMaterials[i].color);
             } else {
                 GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
                 GameObject enemyBall = enemy.transform.GetChild(0).gameObject;
                 enemyBall.GetComponent<Renderer>().material.color = ballMaterials[i].color;
+                SetGradient(enemyBall, ballMaterials[i].color);
             }
         }
     }
 
+    private void SetGradient(GameObject ball, Color color) {
+        ParticleSystem ps = ball.transform.GetChild(0).GetComponent<ParticleSystem>();
+        var col = ps.colorOverLifetime;
+        colorKey[0].color = color;
+        gradient.SetKeys(colorKey, alphaKey);
+        col.color = gradient;
+    }
 
 }

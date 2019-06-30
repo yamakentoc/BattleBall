@@ -5595,7 +5595,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4882ed0c6fb904d8e9b8d6b767ecd082, type: 2}
+  - {fileID: 2100000, guid: 7b8856dfc5c7840caa41673b0e296e5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5765,10 +5765,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1896403301}
-  enemy: {fileID: 1386901711116426999, guid: ce33bd109fdd740b5a01bd9e0ea8f74c, type: 3}
+  enemyPrefab: {fileID: 1386901711116426999, guid: ce33bd109fdd740b5a01bd9e0ea8f74c,
+    type: 3}
   neutralBall: {fileID: 3965131275491748699, guid: 45dc7a4aceb334748b8e647f66c5dfca,
     type: 3}
   neutralBalls: {fileID: 258173063}
+  ballMaterials:
+  - {fileID: 2100000, guid: 8b348caf21b7e4104965e797b62cc59e, type: 2}
+  - {fileID: 2100000, guid: 278eb94b6bb3242f4ad556ae1583bab0, type: 2}
+  - {fileID: 2100000, guid: 99fb82cf82eae4a3dae78e402ec09965, type: 2}
+  - {fileID: 2100000, guid: 32ff23135f9e24975aa23d4ec061748b, type: 2}
+  - {fileID: 2100000, guid: 583b3b72ef43844d79aa9716eb6636b7, type: 2}
+  - {fileID: 2100000, guid: 0e4092c6b61464af5845977ebb3ba560, type: 2}
+  - {fileID: 2100000, guid: ee6713a4bdc0840aebef8266fafd8416, type: 2}
+  - {fileID: 2100000, guid: 64863213dbe7e45b0ac3e409d3aa8d09, type: 2}
 --- !u!4 &1360510817
 Transform:
   m_ObjectHideFlags: 0

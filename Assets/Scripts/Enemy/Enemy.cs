@@ -10,7 +10,7 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
     [SerializeField] NamePlate namePlate;
     private Vector3 previousScale;
     private Vector2 startPos, nowPos, differenceDisVector2;
-    private float speed = 20, radian, speedUpTime, outSideTime;
+    private float speed = 20, radian, speedUpTime;
     private bool foundBall, outSideSafeArea;
     private GameObject targetBall;
 
@@ -30,9 +30,18 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
     public void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag.Equals("NeutralBall")) {
             Debug.Log("ボールゲット");
-            Destroy(other.gameObject);
             foundBall = false;
             targetBall = null;
+            transform.localScale = new Vector3(transform.localScale.x + 0.05f, transform.localScale.y + 0.05f, transform.localScale.z + 0.05f);
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
+            rigidbody.mass = transform.localScale.x / 3.0f;
+            Vector3 diffScale = transform.localScale - previousScale;
+            namePlate.ChangePosition(diffScale);
+            particle.transform.localScale += diffScale / 3.0f;
+            particle.startLifetime += diffScale.x / 4.0f;
+            previousScale = transform.localScale;
+            Destroy(other.gameObject);
+
         }
     }
 
@@ -42,7 +51,6 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
             outSideSafeArea = true;
             foundBall = false;
             targetBall = null;
-            //radian = radian >= 0 ? -180 + radian : 180 + radian;
             radian = Mathf.Atan2(-transform.position.x, -transform.position.z) * Mathf.Rad2Deg;
         }
     }
@@ -99,9 +107,7 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
             owner.rigidbody.transform.rotation = Quaternion.Slerp(owner.transform.rotation, Quaternion.Euler(0, owner.radian, 0), 1);
         }
 
-        public override void Exit() {
-
-        }
+        public override void Exit() { }
 
         private void SearchAroundBall() {
             colliders = Physics.OverlapSphere(owner.transform.position, 3).ToList();

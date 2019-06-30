@@ -30,7 +30,7 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
 
     public void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag.Equals("NeutralBall")) {
-            Debug.Log("ボールゲット");
+            //Debug.Log("ボールゲット");
             foundBall = false;
             targetBall = null;
             transform.localScale = new Vector3(transform.localScale.x + 0.05f, transform.localScale.y + 0.05f, transform.localScale.z + 0.05f);
@@ -48,7 +48,7 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
 
     public void OnTriggerExit(Collider other) {
         if (other.gameObject.tag.Equals("SafeArea")) {
-            Debug.Log("外に出た!");
+            //Debug.Log("外に出た!");
             outSideSafeArea = true;
             foundBall = false;
             targetBall = null;
@@ -81,10 +81,10 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
                     if (randomTime <= 0.0f) {
                         randomTime = 2f;
                         owner.radian = Random.Range(-179f, 180f);
-                        Debug.Log("ランダム");
+                       // Debug.Log("ランダム");
                     }
                 } else {
-                    Debug.Log("ボール発見");
+                    //Debug.Log("ボール発見");
                     float minDistance = Vector3.Distance(owner.transform.position, colliders[0].gameObject.transform.position);
                     foreach (Collider collider in colliders) {
                         float distance = Vector3.Distance(owner.transform.position, collider.gameObject.transform.position);

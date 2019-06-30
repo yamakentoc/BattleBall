@@ -8,6 +8,12 @@ public class NamePlate : MonoBehaviour {
     private Vector3 offset, ballDiffScale;
     private TextMeshPro textMeshPro;
     private int ballValue;
+    private string playerName;
+
+    public string PlayerName {
+        get { return playerName; }
+        set { playerName = value; } 
+    }
 
     void Start() {
         offset = transform.position - ball.transform.position;
@@ -28,7 +34,7 @@ public class NamePlate : MonoBehaviour {
         ballDiffScale += new Vector3(0, diff.y / 2.0f, 0);
         textMeshPro.fontSize += diff.x * 2;
         ballValue += 1;
-        textMeshPro.text = "Player\n" + ballValue;
+        textMeshPro.text = playerName + "\n" + ballValue;
     }
 
 }

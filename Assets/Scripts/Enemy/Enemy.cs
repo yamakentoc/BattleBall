@@ -16,6 +16,7 @@ public class Enemy : StatefulObjectBase<Enemy, EnemyState> {
 
     void Start() {
         Initialize();
+        namePlate.PlayerName = "Enemy";
     }
 
     public void Initialize() {

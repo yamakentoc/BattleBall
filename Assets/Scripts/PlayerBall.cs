@@ -14,6 +14,7 @@ public class PlayerBall : MonoBehaviour {
     private bool isSpeedUp, isDoubleTapStart, isContinueMovefromDoblueTap;
 
     void Start() {
+        namePlate.PlayerName = "Player";
         previousScale = transform.localScale;
         rigidbody = GetComponent<Rigidbody>();
     }
@@ -28,7 +29,6 @@ public class PlayerBall : MonoBehaviour {
 
     void MoveControll() {
         doubleTapTime += Time.deltaTime;
-        //Debug.Log(doubleTapTime);
         List< (TouchType touchType, int id)> touchInfos = TouchManager.GetTouchInfo();
         foreach ((TouchType touchType, int id) in touchInfos) {
             switch (touchType) {

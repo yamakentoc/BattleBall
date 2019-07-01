@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
     private void DeployPlayerBall() {
         ballMaterials = ballMaterials.OrderBy(a => System.Guid.NewGuid()).ToList();
         int playerPosition = Random.Range(0, 8);
+        
         for (int i = 0; i < SUM_PLAYER; i++) {
             Vector3 position = Quaternion.Euler(0f, 360f / SUM_PLAYER * i, 0f) * transform.forward * 75f;
             if (i == playerPosition) {

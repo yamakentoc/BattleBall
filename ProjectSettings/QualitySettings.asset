@@ -151,7 +151,9 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    excludedTargetPlatforms: []
+    excludedTargetPlatforms:
+    - iPhone
+    - Android
   - serializedVersion: 2
     name: Very High
     pixelLightCount: 3
@@ -223,7 +225,7 @@ QualitySettings:
     resolutionScalingFixedDPIFactor: 1
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
-    Android: 3
+    Android: 4
     Lumin: 5
     Nintendo 3DS: 5
     Nintendo Switch: 5
@@ -233,5 +235,5 @@ QualitySettings:
     WebGL: 3
     Windows Store Apps: 5
     XboxOne: 5
-    iPhone: 3
+    iPhone: 4
     tvOS: 2

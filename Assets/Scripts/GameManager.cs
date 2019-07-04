@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour {
     private GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
     private Gradient gradient = new Gradient();
 
+    private void Awake() {
+        Application.targetFrameRate = 60;
+    }
+
     void Start() {
         playerBall = player.transform.GetChild(0).gameObject;
         SetGradientKey();

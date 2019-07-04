@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
     private GradientColorKey[] colorKey = new GradientColorKey[2];
     private GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
     private Gradient gradient = new Gradient();
+    private float addTime;
 
     private void Awake() {
         Application.targetFrameRate = 60;
@@ -23,6 +24,10 @@ public class GameManager : MonoBehaviour {
         SetGradientKey();
         DeployPlayerBall();
         DeployNeutralBall();
+    }
+
+    void Update() {
+        AddDeployNeutralBall();    
     }
 
     private void SetGradientKey() {
@@ -56,17 +61,17 @@ public class GameManager : MonoBehaviour {
             if (i == playerPosition) {
                 player.transform.position = position;
                 playerBall.GetComponent<Renderer>().material.color = ballMaterials[i].color;
-                SetGradient(playerBall, ballMaterials[i].color);
+                SetGradientation(playerBall, ballMaterials[i].color);
             } else {
                 GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
                 GameObject enemyBall = enemy.transform.GetChild(0).gameObject;
                 enemyBall.GetComponent<Renderer>().material.color = ballMaterials[i].color;
-                SetGradient(enemyBall, ballMaterials[i].color);
+                SetGradientation(enemyBall, ballMaterials[i].color);
             }
         }
     }
 
-    private void SetGradient(GameObject ball, Color color) {
+    private void SetGradientation(GameObject ball, Color color) {
         ParticleSystem ps = ball.transform.GetChild(0).GetComponent<ParticleSystem>();
         var col = ps.colorOverLifetime;
         colorKey[0].color = color;
@@ -74,4 +79,15 @@ public class GameManager : MonoBehaviour {
         col.color = gradient;
     }
 
+    private void AddDeployNeutralBall() {
+        addTime -= Time.deltaTime;
+        if (addTime <= 0.0f) {
+            addTime = 0.2f;
+            Vector2 randomCirclePosition = Random.insideUnitCircle * 150f;
+            Vector3 position = new Vector3(randomCirclePosition.x, 30f, randomCirclePosition.y);
+            GameObject ball = Instantiate(neutralBall, position, Quaternion.identity, neutralBalls.transform);
+            //Vector3 ballPosition = ball.transform.position;
+            ball.GetComponent<NautralBall>().dropDown = true;
+        }
+    }
 }
